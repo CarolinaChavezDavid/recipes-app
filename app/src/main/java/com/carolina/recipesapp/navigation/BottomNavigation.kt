@@ -12,7 +12,6 @@ import com.carolina.recipesapp.ui.screens.LocationScreen
 fun NavigationHost(navController: NavHostController) {
     NavHost(navController = navController, startDestination = NavigationItems.Screen1.route) {
         composable(NavigationItems.Screen1.route) {
-            HomeScreen()
         }
         composable(NavigationItems.Screen2.route) {
             FavoritesScreen()

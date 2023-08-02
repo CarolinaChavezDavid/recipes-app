@@ -5,10 +5,13 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.Divider
 import androidx.compose.material.OutlinedTextField
@@ -19,7 +22,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.semantics.Role.Companion.Image
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -27,18 +29,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.compose.rememberNavController
 import com.carolina.recipesapp.R
-import com.carolina.recipesapp.model.RecipeDataModel
-import com.carolina.recipesapp.navigation.NavigationHost
+import com.carolina.recipesapp.data.Recipe
 import com.carolina.recipesapp.navigation.NavigationItems
-import com.carolina.recipesapp.navigation.RecipesBottomNavigation
 import com.carolina.recipesapp.ui.components.RecipeGridCard
 import com.carolina.recipesapp.ui.theme.poppinsFamily
 
-val recipeExmaple = RecipeDataModel(
-    id = "r1",
+val recipeExmaple = Recipe(
+    id = 1,
+    recipeId = "r1",
     name = "Classic Spaghetti Bolognese",
     image = "https://www.unileverfoodsolutions.com.co/dam/global-ufs/mcos/nola/colombia/calcmenu/recipes/CO-recipes/pasta-dishes/pasta-en-salsa-bolognesa/main-header.jpg",
-    description = "A traditional Italian pasta dish with rich meaty Bolognese sauce.",
+    shortDescription = "A traditional Italian pasta dish with rich meaty Bolognese sauce.",
     ingredients = listOf(
         "Spaghetti",
         "Ground beef",
@@ -58,15 +59,14 @@ val recipeExmaple = RecipeDataModel(
         "Stir in tomatoes, tomato paste, and red wine.",
         "Simmer sauce until thickened. Serve over spaghetti.",
     ),
-    location = Pair(4.6486251, -74.2478965),
+    longitude = 4.6486251,
+    latitude = -74.2478965,
 
 )
 
-val recipes = listOf(recipeExmaple, recipeExmaple, recipeExmaple, recipeExmaple, recipeExmaple)
-
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun HomeScreen() {
+fun HomeScreen(recipes: List<Recipe>) {
     val navController = rememberNavController()
     val scaffoldState = rememberScaffoldState()
 
@@ -78,7 +78,7 @@ fun HomeScreen() {
 
     Scaffold(
         scaffoldState = scaffoldState,
-        bottomBar = { RecipesBottomNavigation(navController, navigationItem) },
+        modifier = Modifier.fillMaxWidth(),
     ) {
         Column(modifier = Modifier.fillMaxWidth()) {
             Text(
@@ -93,20 +93,25 @@ fun HomeScreen() {
 
             Divider(startIndent = 8.dp, thickness = 1.dp, color = colorResource(id = R.color.french_gray))
 
-            Row(modifier = Modifier.fillMaxWidth()) {
+            Row(modifier = Modifier.fillMaxWidth().padding(12.dp, 8.dp)) {
                 OutlinedTextField(
+                    modifier = Modifier.height(30.dp),
                     value = "",
                     onValueChange = {},
                     singleLine = true,
                 )
 
-                Card() {
+                Card(
+                    modifier = Modifier.width(30.dp),
+                    shape = RoundedCornerShape(8.dp),
+                ) {
                     Image(
+                        modifier = Modifier.height(30.dp),
                         painter = painterResource(id = R.drawable.baseline_filter_list_24),
                         contentDescription = "filter vector",
+
                     )
                 }
-//
             }
 
             LazyVerticalGrid(
@@ -116,7 +121,6 @@ fun HomeScreen() {
                     RecipeGridCard(it)
                 }
             }
-            NavigationHost(navController)
         }
     }
 }
@@ -124,5 +128,4 @@ fun HomeScreen() {
 @Composable
 @Preview
 fun HomeScreenPreview() {
-    HomeScreen()
 }

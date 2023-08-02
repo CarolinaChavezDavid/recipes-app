@@ -1,8 +1,10 @@
 package com.carolina.recipesapp.ui.screens
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -22,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -130,7 +133,6 @@ fun DetailScreen(recipe: RecipeDataModel) {
 @Composable
 @Preview
 fun DetailScreenPreview() {
-    DetailScreen(recipeExmaple)
 }
 
 fun getEmojiesList(ingredients: List<String>): List<Pair<String, String>> {
@@ -232,6 +234,13 @@ fun DetailHeader(
                 contentScale = ContentScale.Crop,
                 contentDescription = recipe.name,
             )
+            Row(modifier = Modifier.fillMaxWidth()) {
+                Image(
+                    modifier = Modifier.width(50.dp).height(50.dp),
+                    painter = painterResource(id = R.drawable.baseline_keyboard_arrow_left_24),
+                    contentDescription = "back icon",
+                )
+            }
         }
 
         RecipeTitle(recipe)
