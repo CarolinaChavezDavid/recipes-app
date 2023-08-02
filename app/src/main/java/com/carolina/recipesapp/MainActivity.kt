@@ -1,5 +1,6 @@
 package com.carolina.recipesapp
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -8,66 +9,76 @@ import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.ViewModelProvider
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.carolina.recipesapp.data.Recipe
-import com.carolina.recipesapp.data.Resource
-import com.carolina.recipesapp.model.RecipesViewModel
-import com.carolina.recipesapp.model.RecipesViewModelProvider
-import com.carolina.recipesapp.repository.RecipesRepository
-import com.carolina.recipesapp.ui.screens.HomeScreen
+import com.carolina.recipesapp.model.RecipesListViewModel
+import com.carolina.recipesapp.navigation.AppNavigation
 import com.carolina.recipesapp.ui.screens.recipeExmaple
 import com.carolina.recipesapp.ui.theme.RecipesAPPTheme
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    lateinit var viewModel: RecipesViewModel
+    lateinit var viewModel: RecipesListViewModel
+    var recipes: List<Recipe> = listOf(recipeExmaple, recipeExmaple, recipeExmaple)
 
-    lateinit var recipes: List<Recipe>
+    private var recipesList: List<Recipe> = recipes
 
     private val TAG = "RECIPES ERROR"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val repository = RecipesRepository()
-        val viewModelProvider = RecipesViewModelProvider(repository)
-
-        viewModel = ViewModelProvider(this, viewModelProvider)[RecipesViewModel::class.java]
-
-        viewModel.recipes.observe(
-            this,
-        ) { response ->
-            Log.i(TAG, "data: ${response.data}")
-            when (response) {
-                is Resource.Success -> {
-                    response.data?.let { data ->
-                        recipes = data.recipes
-                        Log.i("carolina", "error: ${data.recipes}")
-                    }
-                }
-                else -> {
-                    recipes = listOf(recipeExmaple)
-                    response.message?.let {
-                        Log.e(TAG, "error: $it")
-                    }
-                }
-            }
-        }
 
         setContent {
             RecipesAPPTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
+                MainScreen()
+            }
+        }
+    }
+}
+
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter", "CoroutineCreationDuringComposition")
+@Composable
+fun MainScreen(viewModel: RecipesListViewModel = hiltViewModel()) {
+    val scaffoldState = rememberScaffoldState()
+    val getRecipeDate = viewModel.getRecipesData.observeAsState()
+    Log.i("carolina", "$getRecipeDate")
+
+    Surface(
+        color = MaterialTheme.colors.background,
+        modifier = Modifier.fillMaxSize(),
+    ) {
+        Scaffold(
+            modifier = Modifier.fillMaxSize(),
+            scaffoldState = scaffoldState,
+        ) {
+            if (viewModel.isLoading.value) {
+                Column(
                     modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colors.background,
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
-                    HomeScreen(recipes)
+                    CircularProgressIndicator()
                 }
+            }
+
+            if (!viewModel.isLoading.value) {
+                getRecipeDate.value?.let { recipes -> AppNavigation(recipes) }
             }
         }
     }

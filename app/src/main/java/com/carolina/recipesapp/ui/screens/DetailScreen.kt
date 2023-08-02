@@ -2,6 +2,7 @@ package com.carolina.recipesapp.ui.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -27,14 +28,15 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.carolina.recipesapp.R
+import com.carolina.recipesapp.data.Recipe
 import com.carolina.recipesapp.model.IngredientsList
-import com.carolina.recipesapp.model.RecipeDataModel
+import com.carolina.recipesapp.model.RecipesListViewModel
 import com.carolina.recipesapp.ui.theme.poppinsFamily
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
@@ -44,12 +46,15 @@ import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
 
 @Composable
-fun DetailScreen(recipe: RecipeDataModel) {
+fun DetailScreen(recipeId: String, navController: NavController, recipes: List<Recipe>) {
+
+    val recipe = recipes.find { item -> item.recipeId == recipeId } ?: recipeExmaple
     val finalList = getEmojiesList(recipe.ingredients)
     val steps = recipe.steps
+    val location = Pair(recipe.latitude, recipe.longitude)
     Surface(modifier = Modifier.fillMaxWidth()) {
         LazyColumn {
-            item { DetailHeader(recipe) }
+            item { DetailHeader(recipe, navController) }
 
             item {
                 Text(
@@ -66,7 +71,7 @@ fun DetailScreen(recipe: RecipeDataModel) {
             item {
                 Text(
                     modifier = Modifier.padding(12.dp, 10.dp),
-                    text = recipe.description,
+                    text = recipe.shortDescription,
                     color = colorResource(id = R.color.onyx),
                     fontSize = 14.sp,
                     fontFamily = poppinsFamily,
@@ -124,15 +129,10 @@ fun DetailScreen(recipe: RecipeDataModel) {
             }
 
             item {
-                RecipeLocation(recipe.location)
+                RecipeLocation(location)
             }
         }
     }
-}
-
-@Composable
-@Preview
-fun DetailScreenPreview() {
 }
 
 fun getEmojiesList(ingredients: List<String>): List<Pair<String, String>> {
@@ -220,7 +220,8 @@ fun OverlappingBoxes(
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun DetailHeader(
-    recipe: RecipeDataModel,
+    recipe: Recipe,
+    navController: NavController,
 ) {
     OverlappingBoxes(modifier = Modifier.fillMaxWidth()) {
         Card(
@@ -236,9 +237,12 @@ fun DetailHeader(
             )
             Row(modifier = Modifier.fillMaxWidth()) {
                 Image(
-                    modifier = Modifier.width(50.dp).height(50.dp),
+                    modifier = Modifier.width(50.dp).height(50.dp).clickable {
+                        navController.popBackStack()
+                    },
                     painter = painterResource(id = R.drawable.baseline_keyboard_arrow_left_24),
                     contentDescription = "back icon",
+
                 )
             }
         }
@@ -248,7 +252,7 @@ fun DetailHeader(
 }
 
 @Composable
-fun RecipeTitle(recipe: RecipeDataModel) {
+fun RecipeTitle(recipe: Recipe) {
     Card(
         modifier = Modifier
             .width(250.dp)

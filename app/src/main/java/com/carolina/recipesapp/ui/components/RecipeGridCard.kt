@@ -24,12 +24,12 @@ import com.carolina.recipesapp.ui.theme.poppinsFamily
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
-fun RecipeGridCard(recipe: Recipe) {
+fun RecipeGridCard(recipe: Recipe, onNavigateToDetail: (String) -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .padding(15.dp)
-            .clickable { },
+            .clickable { onNavigateToDetail(recipe.recipeId) },
 
     ) {
         Card() {

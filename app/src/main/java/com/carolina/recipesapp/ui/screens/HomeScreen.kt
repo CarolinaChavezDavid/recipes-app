@@ -27,10 +27,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.compose.rememberNavController
 import com.carolina.recipesapp.R
 import com.carolina.recipesapp.data.Recipe
-import com.carolina.recipesapp.navigation.NavigationItems
 import com.carolina.recipesapp.ui.components.RecipeGridCard
 import com.carolina.recipesapp.ui.theme.poppinsFamily
 
@@ -66,15 +64,8 @@ val recipeExmaple = Recipe(
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun HomeScreen(recipes: List<Recipe>) {
-    val navController = rememberNavController()
+fun HomeScreen(onNavigateToDetail: (String) -> Unit, recipes: List<Recipe>) {
     val scaffoldState = rememberScaffoldState()
-
-    val navigationItem = listOf(
-        NavigationItems.Screen1,
-        NavigationItems.Screen2,
-        NavigationItems.Screen3,
-    )
 
     Scaffold(
         scaffoldState = scaffoldState,
@@ -118,7 +109,7 @@ fun HomeScreen(recipes: List<Recipe>) {
                 columns = GridCells.Adaptive(minSize = 200.dp),
             ) {
                 items(recipes) {
-                    RecipeGridCard(it)
+                    RecipeGridCard(it, onNavigateToDetail)
                 }
             }
         }

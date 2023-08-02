@@ -17,20 +17,9 @@ fun currentRoute(navController: NavController): String? {
 }
 
 @Composable
-fun RecipesBottomNavigation(navController: NavController, menuItems: List<NavigationItems>) {
+fun RecipesBottomNavigation(navController: NavController, menuItems: List<AppScreens>) {
     BottomNavigation {
         val currentRoute = currentRoute(navController = navController)
-        menuItems.forEach { item ->
-            BottomNavigationItem(
-                selected = currentRoute == item.route,
-                onClick = {
-                    if (currentRoute !== item.route) {
-                        navController.navigate(item.route)
-                    }
-                },
-                icon = { Icon(painter = painterResource(id = item.icon), contentDescription = item.destination) },
-                label = { Text(text = item.destination) },
-            )
-        }
+
     }
 }
