@@ -2,7 +2,6 @@ package com.carolina.recipesapp.ui.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -41,14 +40,12 @@ fun RecipeGridCard(recipe: RecipeDataModel) {
         }
 
         Row(
-            modifier = Modifier.padding(8.dp).fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier.padding(8.dp),
         ) {
             Text(
                 text = recipe.name,
                 color = colorResource(id = R.color.eerie_black),
                 fontSize = 18.sp,
-
                 fontFamily = poppinsFamily,
                 fontWeight = FontWeight.Normal,
             )

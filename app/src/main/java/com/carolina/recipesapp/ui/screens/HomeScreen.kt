@@ -1,18 +1,38 @@
 package com.carolina.recipesapp.ui.screens
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.Card
+import androidx.compose.material.Divider
+import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.Role.Companion.Image
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.compose.rememberNavController
+import com.carolina.recipesapp.R
 import com.carolina.recipesapp.model.RecipeDataModel
 import com.carolina.recipesapp.navigation.NavigationHost
 import com.carolina.recipesapp.navigation.NavigationItems
 import com.carolina.recipesapp.navigation.RecipesBottomNavigation
 import com.carolina.recipesapp.ui.components.RecipeGridCard
+import com.carolina.recipesapp.ui.theme.poppinsFamily
 
 val recipeExmaple = RecipeDataModel(
     id = "r1",
@@ -60,12 +80,49 @@ fun HomeScreen() {
         scaffoldState = scaffoldState,
         bottomBar = { RecipesBottomNavigation(navController, navigationItem) },
     ) {
-        Text(text = "Holi Caro")
-        LazyColumn {
-            items(recipes) {
-                RecipeGridCard(it)
+        Column(modifier = Modifier.fillMaxWidth()) {
+            Text(
+                modifier = Modifier.fillMaxWidth(),
+                text = "Recipes",
+                color = colorResource(id = R.color.eerie_black),
+                fontSize = 36.sp,
+                fontFamily = poppinsFamily,
+                fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Center,
+            )
+
+            Divider(startIndent = 8.dp, thickness = 1.dp, color = colorResource(id = R.color.french_gray))
+
+            Row(modifier = Modifier.fillMaxWidth()) {
+                OutlinedTextField(
+                    value = "",
+                    onValueChange = {},
+                    singleLine = true,
+                )
+
+                Card() {
+                    Image(
+                        painter = painterResource(id = R.drawable.baseline_filter_list_24),
+                        contentDescription = "filter vector",
+                    )
+                }
+//
             }
+
+            LazyVerticalGrid(
+                columns = GridCells.Adaptive(minSize = 200.dp),
+            ) {
+                items(recipes) {
+                    RecipeGridCard(it)
+                }
+            }
+            NavigationHost(navController)
         }
-        NavigationHost(navController)
     }
+}
+
+@Composable
+@Preview
+fun HomeScreenPreview() {
+    HomeScreen()
 }
