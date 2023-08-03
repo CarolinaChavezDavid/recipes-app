@@ -11,7 +11,7 @@ Detail screen displays description, ingredients, cooking steps and location usin
 
 ![SearchFunctionRecipesApp](https://github.com/CarolinaChavezDavid/recipes-app/assets/77591347/fa5bd055-0f8c-417c-bb04-d008bc33dbdd)
 
-### filter function
+### Filter function
 Filter by ingredients.
 
 ![FilterFunctionRecipesApp](https://github.com/CarolinaChavezDavid/recipes-app/assets/77591347/399b5c99-f487-4ede-a415-b7f341650235)
