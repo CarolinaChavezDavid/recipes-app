@@ -25,11 +25,18 @@ class RecipesListViewModel @Inject constructor(
         getRecipesData()
     }
 
-    private fun getRecipesData() = viewModelScope.launch {
+    fun getRecipesData() = viewModelScope.launch {
         val response = repository.getRecipes()
         if (response is Resource.Success) {
             isLoading.value = false
             _getRecipesData.value = response.data?.recipes
         }
+    }
+
+    fun searchRecipe(query: String) {
+        val foundRecipes = _getRecipesData.value?.filter { recipe ->
+            recipe.name.contains(query)
+        }
+        _getRecipesData.postValue(foundRecipes ?: listOf())
     }
 }

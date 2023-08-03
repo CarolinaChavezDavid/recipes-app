@@ -36,7 +36,6 @@ import com.bumptech.glide.integration.compose.GlideImage
 import com.carolina.recipesapp.R
 import com.carolina.recipesapp.data.Recipe
 import com.carolina.recipesapp.model.IngredientsList
-import com.carolina.recipesapp.model.RecipesListViewModel
 import com.carolina.recipesapp.ui.theme.poppinsFamily
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
@@ -47,7 +46,6 @@ import com.google.maps.android.compose.rememberCameraPositionState
 
 @Composable
 fun DetailScreen(recipeId: String, navController: NavController, recipes: List<Recipe>) {
-
     val recipe = recipes.find { item -> item.recipeId == recipeId } ?: recipeExmaple
     val finalList = getEmojiesList(recipe.ingredients)
     val steps = recipe.steps
@@ -305,7 +303,6 @@ fun CookingSteps(index: Int, step: String) {
                 fontSize = 14.sp,
                 fontFamily = poppinsFamily,
                 fontWeight = FontWeight.Normal,
-                textAlign = TextAlign.Center,
                 color = colorResource(id = R.color.onyx),
 
             )

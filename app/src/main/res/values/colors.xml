@@ -15,6 +15,9 @@
     <color name="vanilla">#FFF1AE</color>
     <color name="cream">#FFFFB7</color>
     <color name="mikado_yellow">#FFC300</color>
-
-
+    <color name="champagne_pink">#E2CFC4</color>
+    <color name="dutch_white">#FAEDCB</color>
+    <color name="mint_green">#C9E4DE</color>
+    <color name="platinum">#E2E2DF</color>
+    <color name="columbia_blue">#C6DEF1</color>
 </resources>
